@@ -6,15 +6,15 @@
         <h3 class="title">Login Form</h3>
       </div>
 
-      <el-form-item prop="username">
+      <el-form-item prop="phoneNumber">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
         <el-input
-          ref="username"
-          v-model="loginForm.username"
-          placeholder="Username"
-          name="username"
+          ref="phoneNumber"
+          v-model="loginForm.phoneNumber"
+          placeholder="请输入手机号"
+          name="phoneNumber"
           type="text"
           tabindex="1"
           auto-complete="on"
@@ -30,7 +30,7 @@
           ref="password"
           v-model="loginForm.password"
           :type="passwordType"
-          placeholder="Password"
+          placeholder="请输入密码"
           name="password"
           tabindex="2"
           auto-complete="on"
@@ -53,14 +53,13 @@
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
 
 export default {
   name: 'Login',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
+    const validatePhoneNumber = (rule, value, callback) => {
+      if (value.length === 0) {
+        callback(new Error('Please enter the correct phone number'))
       } else {
         callback()
       }
@@ -74,11 +73,12 @@ export default {
     }
     return {
       loginForm: {
+        phoneNumber: '17605941026',
         username: 'admin',
-        password: '111111'
+        password: '123456'
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        phoneNumber: [{ required: true, trigger: 'blur', validator: validatePhoneNumber }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
       loading: false,
