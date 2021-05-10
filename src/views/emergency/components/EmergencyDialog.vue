@@ -11,17 +11,17 @@
             <el-form ref="form" :model="form" label-width="auto">
                 <el-row>
                     <el-col :span="12">
-                        <el-form-item label="申请人昵称" prop="nickname">
+                        <el-form-item label="用户昵称" prop="nickname">
                             <el-input
                                 v-if="isEdit"
                                 v-model="form.nickname"
-                                placeholder="请输入申请人昵称"
+                                placeholder="请输入昵称"
                             />
                             <div v-else>{{ form.realName }}</div>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="申请人姓名" prop="realName">
+                        <el-form-item label="用户姓名" prop="realName">
                             <el-input
                                 v-if="isEdit"
                                 v-model="form.realName"
@@ -56,43 +56,40 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="预约时间" prop="time">
-                            <el-date-picker
-                                v-if="isEdit"
-                                clearable
-                                v-model="form.time"
-                                type="datetime"
-                                placeholder="选择日期"
-                                value-format="yyyy-MM-dd HH:mm"
-                                :picker-options="dateOption"
-                            />
-                            <div v-else>{{ form.time }}</div>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12" v-if="applicationType === 2">
-                        <el-form-item label="就诊地点" prop="address">
+                        <el-form-item label="求救信息" prop="message">
                             <el-input
                                 v-if="isEdit"
-                                v-model="form.address"
-                                placeholder="请输入就诊地点"
+                                v-model="form.message"
+                                placeholder="请输入信息"
+                                maxlength="11"
                             />
-                            <div v-else>{{ form.address }}</div>
+                            <div v-else>{{ form.message }}</div>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="用户位置" prop="location">
+                            <el-input
+                                v-if="isEdit"
+                                v-model="form.location"
+                                placeholder="请输入位置"
+                            />
+                            <div v-else>{{ form.location }}</div>
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item label="病情描述" prop="height">
+                        <el-form-item label="信息备注" prop="remark">
                             <el-input
                                 v-if="isEdit"
-                                v-model="form.description"
+                                v-model="form.remark"
                                 type="textarea"
-                                placeholder="病情描述"
+                                placeholder="备注"
                             >
                             </el-input>
                             <div v-else>
                                 <div
                                     class="description-content padding-lr-xs border radius"
                                 >
-                                    <div v-html="form.description"></div>
+                                    <div v-html="form.remark"></div>
                                 </div>
                             </div>
                         </el-form-item>

@@ -168,12 +168,11 @@
 
 <script>
 import {
-    approve,
-    reject,
-    getApplicationById,
-    deleteApplication,
-} from "@/api/application";
-import { getEmergencyList, stop } from "@/api/emergency";
+    getEmergencyList,
+    stop,
+    deleteEmergency,
+    getEmergencyById,
+} from "@/api/emergency";
 import PageTable from "@/components/PageTable/PageTable.vue";
 import EmergencyDialog from "./components/EmergencyDialog.vue";
 
@@ -276,7 +275,7 @@ export default {
 
         // 查看
         handleInfo(row) {
-            getApplicationById(row.id).then((res) => {
+            getEmergencyById(row.id).then((res) => {
                 if (res.success) {
                     this.form = res.data;
                     this.dialogTitle = "查看";
@@ -311,7 +310,7 @@ export default {
         // 批量删除
         handleMultiDelete() {
             this.$confirm(
-                "确认删除这" + this.selections.length + "个预约申请?",
+                "确认删除这" + this.selections.length + "个呼救申请?",
                 "警告",
                 {
                     confirmButtonText: "确定",
@@ -321,7 +320,7 @@ export default {
             )
                 .then(() => {
                     var ids = this.selections.map((item) => item.id).join(",");
-                    deleteApplication(ids).then((res) => {
+                    deleteEmergency(ids).then((res) => {
                         if (res.success) {
                             this.$message.success("删除成功");
                             this.reload();
