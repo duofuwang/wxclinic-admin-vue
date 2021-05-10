@@ -51,7 +51,7 @@ export const constantRoutes = [
             path: 'dashboard',
             name: 'Dashboard',
             component: () => import('@/views/dashboard/index'),
-            meta: { title: '首页', icon: 'dashboard' }
+            meta: { title: '首页', icon: 'el-icon-s-home' }
         }]
     },
 
@@ -60,19 +60,19 @@ export const constantRoutes = [
         component: Layout,
         redirect: '/system/user',
         name: 'System',
-        meta: { title: '系统管理', icon: 'system' },
+        meta: { title: '系统管理', icon: 'el-icon-s-tools' },
         children: [
             {
                 path: 'user',
                 name: 'User',
                 component: () => import('@/views/system/user/index'),
-                meta: { title: '用户管理', icon: 'peoples' }
+                meta: { title: '用户管理', icon: 'el-icon-user-solid' }
             },
             {
                 path: 'admin',
                 name: 'Admin',
                 component: () => import('@/views/system/admin/index'),
-                meta: { title: '管理员', icon: 'el-icon-s-custom' }
+                meta: { title: '管理员', icon: 'el-icon-s-platform' }
             }
         ]
     },
@@ -98,6 +98,19 @@ export const constantRoutes = [
             }
         ]
     },
+
+    {
+      path: '/emergency',
+      component: Layout,
+      children: [
+          {
+              path: 'index',
+              name: 'Emergency',
+              component: () => import('@/views/emergency/index'),
+              meta: { title: '紧急呼救', icon: 'el-icon-phone' }
+          }
+      ]
+  },
 
     {
         path: '/example',

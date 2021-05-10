@@ -8,10 +8,20 @@
             @close="handleClose"
             append-to-body
         >
-            <el-form ref="form" :model="form" label-width="80px">
+            <el-form ref="form" :model="form" label-width="auto">
                 <el-row>
                     <el-col :span="12">
-                        <el-form-item label="姓名" prop="realName">
+                        <el-form-item label="申请人昵称" prop="nickname">
+                            <el-input
+                                v-if="isEdit"
+                                v-model="form.nickname"
+                                placeholder="请输入申请人昵称"
+                            />
+                            <div v-else>{{ form.realName }}</div>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="申请人姓名" prop="realName">
                             <el-input
                                 v-if="isEdit"
                                 v-model="form.realName"
@@ -32,6 +42,20 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
+                        <el-form-item label="发起时间" prop="createTime">
+                            <el-date-picker
+                                v-if="isEdit"
+                                clearable
+                                v-model="form.createTime"
+                                type="datetime"
+                                placeholder="选择日期"
+                                value-format="yyyy-MM-dd HH:mm"
+                                :picker-options="dateOption"
+                            />
+                            <div v-else>{{ form.createTime }}</div>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
                         <el-form-item label="预约时间" prop="time">
                             <el-date-picker
                                 v-if="isEdit"
@@ -45,6 +69,16 @@
                             <div v-else>{{ form.time }}</div>
                         </el-form-item>
                     </el-col>
+                    <el-col :span="12" v-if="applicationType === 2">
+                        <el-form-item label="就诊地点" prop="address">
+                            <el-input
+                                v-if="isEdit"
+                                v-model="form.address"
+                                placeholder="请输入就诊地点"
+                            />
+                            <div v-else>{{ form.address }}</div>
+                        </el-form-item>
+                    </el-col>
                     <el-col :span="24">
                         <el-form-item label="病情描述" prop="height">
                             <el-input
@@ -55,7 +89,11 @@
                             >
                             </el-input>
                             <div v-else>
-                                {{ form.description }}
+                                <div
+                                    class="description-content padding-lr-xs border radius"
+                                >
+                                    <div v-html="form.description"></div>
+                                </div>
                             </div>
                         </el-form-item>
                     </el-col>
@@ -69,19 +107,10 @@
                 <el-button @click="handleClose" v-if="!isEdit">返 回</el-button>
             </div>
         </el-dialog>
-
-        <!-- 查看图片 -->
-        <el-dialog :visible.sync="dialogVisible" width="400px">
-            <div class="flex justify-center">
-                <img width="100%" :src="dialogImageUrl" alt="" />
-            </div>
-        </el-dialog>
     </div>
 </template>
 
 <script>
-import { upload } from "@/api/obs";
-import { save } from "@/api/user";
 
 export default {
     props: {
@@ -93,7 +122,7 @@ export default {
         },
         title: {
             type: String,
-            default: "编辑",
+            default: "查看",
         },
         show: {
             type: Boolean,
@@ -103,6 +132,10 @@ export default {
             type: Boolean,
             default: false,
         },
+        applicationType: {
+            type: Number,
+            default: 1
+        }
     },
     watch: {
         show() {
@@ -130,66 +163,19 @@ export default {
 
     methods: {
         handleSubmit() {
-            save(this.form).then((res) => {
-                if (res.success) {
-                    this.refresh = true;
-                    this.handleClose();
-                }
-            });
+            console.log(this.form)
         },
         handleClose() {
             this.$emit("close", this.refresh);
             this.refresh = false;
-        },
-
-        handlePictureCardPreview(url) {
-            this.dialogImageUrl = url;
-            this.dialogVisible = true;
-        },
-
-        handelUpload(param) {
-            var formData = new FormData();
-            // 添加参数
-            formData.append("file", param.file);
-            upload(formData)
-                .then((res) => {
-                    console.log(res);
-                    this.form.avatarUrl = res.data;
-                })
-                .catch((err) => {});
-        },
-
-        handleRadioChange() {
-            console.log(this.form.gender);
         },
     },
 };
 </script>
 
 <style scoped>
-::v-deep .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-}
-
-::v-deep .avatar-uploader .el-upload:hover {
-    border-color: #409eff;
-}
-
-::v-deep .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 80px;
-    height: 80px;
-    line-height: 80px;
-    text-align: center;
-}
-.avatar {
-    width: 80px;
-    height: 80px;
-    display: block;
+.description-content {
+    max-height: 150px;
+    overflow-y: scroll;
 }
 </style>>

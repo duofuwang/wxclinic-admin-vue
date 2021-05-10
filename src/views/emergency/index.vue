@@ -31,7 +31,7 @@
                 ></el-input>
             </el-form-item>
 
-            <el-form-item label="日期 " prop="status">
+            <el-form-item label="日期 " prop="range">
                 <el-date-picker
                     v-model="range"
                     value-format="yyyy-MM-dd"
@@ -46,7 +46,7 @@
             <el-form-item label="状态 " prop="status">
                 <el-select
                     v-model="searchForm.status"
-                    placeholder="请选择审核状态"
+                    placeholder="请选择呼救状态"
                     clearable
                     size="small"
                     @keyup.enter.native="handleQuery"
@@ -96,18 +96,13 @@
                 <el-table-column
                     align="center"
                     prop="nickname"
-                    label="申请人昵称"
+                    label="昵称"
                 ></el-table-column>
                 <el-table-column
                     align="center"
                     prop="realName"
-                    label="申请人姓名"
+                    label="姓名"
                 ></el-table-column>
-                <el-table-column align="center" prop="gender" label="性别">
-                    <template slot-scope="scope">{{
-                        scope.row.gender === 1 ? "男" : "女"
-                    }}</template>
-                </el-table-column>
                 <el-table-column
                     align="center"
                     prop="phoneNumber"
@@ -115,15 +110,18 @@
                 ></el-table-column>
                 <el-table-column
                     align="center"
-                    prop="time"
-                    label="预约时间"
+                    prop="message"
+                    label="信息"
+                    :show-overflow-tooltip="true"
                 ></el-table-column>
                 <el-table-column
                     align="center"
-                    prop="description"
-                    label="病情描述"
-                    ><template slot-scope="scope">{{
-                        scope.row.description | descriptionFilter
+                    prop="location"
+                    label="位置"
+                ></el-table-column>
+                <el-table-column align="center" prop="remark" label="备注">
+                    <template slot-scope="scope">{{
+                        scope.row.remark
                     }}</template></el-table-column
                 >
                 <el-table-column
@@ -131,7 +129,7 @@
                     prop="createTime"
                     label="发起时间"
                 ></el-table-column>
-                <el-table-column align="center" prop="status" label="状态">
+                <el-table-column align="center" prop="gender" label="状态">
                     <template slot-scope="{ row }">
                         <el-tag :type="row.status | statusTypeFilter">
                             {{ row.status | statusFilter }}
@@ -149,14 +147,8 @@
                         <el-button
                             type="text"
                             icon="el-icon-check"
-                            @click="handleApprove(scope.row)"
-                            >通过</el-button
-                        >
-                        <el-button
-                            type="text"
-                            icon="el-icon-close"
-                            @click="handleReject(scope.row)"
-                            >拒绝</el-button
+                            @click="handleStop(scope.row)"
+                            >结束</el-button
                         >
                     </template>
                 </el-table-column>
@@ -164,42 +156,38 @@
         </page-table>
 
         <!-- 查看、修改对话框 -->
-        <application-dialog
+        <emergency-dialog
             :title="dialogTitle"
-            :show="showApplicationDialog"
+            :show="showEmergencyDialog"
             :form="form"
             :isEdit="isEdit"
             @close="handleClose"
-        ></application-dialog>
+        ></emergency-dialog>
     </div>
 </template>
 
 <script>
 import {
-    getApplicationList,
     approve,
     reject,
     getApplicationById,
     deleteApplication,
 } from "@/api/application";
+import { getEmergencyList, stop } from "@/api/emergency";
 import PageTable from "@/components/PageTable/PageTable.vue";
-import ApplicationDialog from "../components/ApplicationDialog.vue";
+import EmergencyDialog from "./components/EmergencyDialog.vue";
 
 export default {
-    components: { PageTable, ApplicationDialog },
+    components: { PageTable, EmergencyDialog },
     filters: {
         statusFilter(status) {
-            if (status === 0) return "待审核";
-            if (status === 1) return "通过";
-            if (status === 2) return "拒绝";
-            if (status === 3) return "撤销";
-            return "待审核";
+            if (status === 1) return "呼救中";
+            if (status === 2) return "已结束";
+            return "已结束";
         },
         statusTypeFilter(status) {
-            if (status === 0) return "warning";
-            if (status === 1) return "success";
-            if (status === 2) return "danger";
-            if (status === 3) return "info";
+            if (status === 1) return "warning";
+            if (status === 2) return "info";
             return "warning";
         },
         descriptionFilter(description) {
@@ -210,29 +198,21 @@ export default {
         return {
             searchForm: {},
             range: [],
-            showApplicationDialog: false,
+            showEmergencyDialog: false,
             isEdit: false,
             form: {},
             dialogTitle: "",
             selections: [],
             applicationType: 1,
-            // 审核状态
+            // 呼救状态
             statusOptions: [
                 {
-                    value: 0,
-                    label: "待审核",
-                },
-                {
                     value: 1,
-                    label: "通过",
+                    label: "呼救中",
                 },
                 {
                     value: 2,
-                    label: "拒绝",
-                },
-                {
-                    value: 3,
-                    label: "撤销",
+                    label: "已结束",
                 },
             ],
         };
@@ -253,7 +233,7 @@ export default {
                 endDate: this.range[1],
             };
 
-            getApplicationList(filter).then((res) => {
+            getEmergencyList(filter).then((res) => {
                 this.total = res.data.total;
                 const tableData = {
                     ...res.data,
@@ -278,7 +258,7 @@ export default {
 
         // 对话框关闭
         handleClose(refresh) {
-            this.showApplicationDialog = false;
+            this.showEmergencyDialog = false;
             if (refresh) {
                 this.reload();
             }
@@ -300,43 +280,27 @@ export default {
                 if (res.success) {
                     this.form = res.data;
                     this.dialogTitle = "查看";
-                    this.showApplicationDialog = true;
+                    this.showEmergencyDialog = true;
                     this.isEdit = false;
                 }
             });
         },
 
         // 通过
-        handleApprove(row) {
-            this.$prompt('确认通过 "' + row.nickname + '" 的预约申请?', "提示", {
-                type: "warning",
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-                inputPlaceholder: "输入备注（可选）",
-            })
-                .then(({ value }) => {
-                    approve(row.id, value).then((res) => {
+        handleStop(row) {
+            this.$confirm(
+                "确认结束 " + row.nickname + " 的紧急呼救吗?",
+                "提示",
+                {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning",
+                }
+            )
+                .then(() => {
+                    stop(row.id).then((res) => {
                         if (res.success) {
-                            this.$message.success("通过成功");
-                            this.reload();
-                        }
-                    });
-                })
-                .catch(() => {});
-        },
-
-        // 拒绝
-        handleReject(row) {
-            this.$prompt('确认拒绝 "' + row.nickname + '" 的预约申请?', "提示", {
-                type: "warning",
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-                inputPlaceholder: "输入备注（可选）",
-            })
-                .then(({ value }) => {
-                    reject(row.id, value).then((res) => {
-                        if (res.success) {
-                            this.$message.success("拒绝成功");
+                            this.$message.success("结束成功");
                             this.reload();
                         }
                     });

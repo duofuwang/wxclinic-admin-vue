@@ -523,3 +523,19 @@
 .grid.col-5>view {
 	width: 20%;
 }
+
+.border {
+    border: 1px solid #d9d9d9;
+}
+
+.border-dashed {
+    border: 1px dashed #d9d9d9;
+}
+
+.border.radius {
+    border-radius: 6px;
+}
+
+.border-dashed.radius {
+    border-radius: 6px;
+}
