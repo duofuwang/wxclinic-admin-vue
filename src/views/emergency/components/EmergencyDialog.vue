@@ -6,6 +6,7 @@
             :visible.sync="visible"
             width="650px"
             @close="handleClose"
+            @open="handleOpen"
             append-to-body
         >
             <el-form ref="form" :model="form" label-width="auto">
@@ -77,6 +78,16 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
+                        <el-form-item label="定位信息" prop="location">
+                            <tencent-map
+                                ref="mymap"
+                                v-if="showMap"
+                                :longitude="form.longitude"
+                                :latitude="form.latitude"
+                            ></tencent-map>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
                         <el-form-item label="信息备注" prop="remark">
                             <el-input
                                 v-if="isEdit"
@@ -87,7 +98,11 @@
                             </el-input>
                             <div v-else>
                                 <div
-                                    class="description-content padding-lr-xs border radius"
+                                    :class="
+                                        form.remark == null
+                                            ? ''
+                                            : 'description-content padding-lr-xs border radius'
+                                    "
                                 >
                                     <div v-html="form.remark"></div>
                                 </div>
@@ -108,8 +123,9 @@
 </template>
 
 <script>
-
+import TencentMap from "@/components/TencentMap";
 export default {
+    components: { TencentMap },
     props: {
         form: {
             type: Object,
@@ -131,8 +147,8 @@ export default {
         },
         applicationType: {
             type: Number,
-            default: 1
-        }
+            default: 1,
+        },
     },
     watch: {
         show() {
@@ -142,12 +158,11 @@ export default {
     data() {
         return {
             visible: this.show,
+            showMap: false,
             dialogImageUrl: "",
             dialogVisible: false,
             disabled: false,
-
             refresh: false,
-
             // 日期选项
             dateOption: {
                 // 禁用未来的日期
@@ -157,14 +172,18 @@ export default {
             },
         };
     },
-
     methods: {
+        handleOpen() {
+            this.showMap = true;
+        },
+
         handleSubmit() {
-            console.log(this.form)
+            console.log(this.form);
         },
         handleClose() {
             this.$emit("close", this.refresh);
             this.refresh = false;
+            this.showMap = false;
         },
     },
 };
@@ -173,6 +192,5 @@ export default {
 <style scoped>
 .description-content {
     max-height: 150px;
-    overflow-y: scroll;
 }
 </style>>

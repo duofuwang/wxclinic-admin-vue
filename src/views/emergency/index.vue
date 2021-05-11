@@ -157,6 +157,7 @@
 
         <!-- 查看、修改对话框 -->
         <emergency-dialog
+            ref="dialog"
             :title="dialogTitle"
             :show="showEmergencyDialog"
             :form="form"
@@ -281,6 +282,7 @@ export default {
                     this.dialogTitle = "查看";
                     this.showEmergencyDialog = true;
                     this.isEdit = false;
+                  //   this.$refs.dialog.setLocation();
                 }
             });
         },
