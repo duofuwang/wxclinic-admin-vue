@@ -185,13 +185,6 @@ export default {
             authorListOptions: [],
             previreImageVisible: false,
             dialogImageUrl: "",
-            // rules: {
-            //     image_uri: [{ validator: validateRequire }],
-            //     title: [{ validator: validateRequire }],
-            //     content: [{ validator: validateRequire }],
-            //     summary: [{ validator: validateRequire }],
-            //     source_uri: [{ validator: validateSourceUri, trigger: "blur" }],
-            // },
             rules: {
                 title: [
                     {
@@ -282,7 +275,12 @@ export default {
             getArticleById(id)
                 .then((response) => {
                     this.postForm = response.data;
-                    this.getArticleTypeById();
+                    if (
+                        this.postForm.type !== null &&
+                        this.postForm.type !== ""
+                    ) {
+                        this.getArticleTypeById();
+                    }
                 })
                 .catch((err) => {
                     console.log(err);

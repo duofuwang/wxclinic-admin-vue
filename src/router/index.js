@@ -146,19 +146,19 @@ export const constantRoutes = [
                 name: 'EditArticle',
                 meta: { title: '编辑文章', noCache: true, activeMenu: '/article/list' },
                 hidden: true
-              },
+            },
         ]
     },
 
     {
-        path: '/form',
+        path: '/record',
         component: Layout,
         children: [
             {
                 path: 'index',
-                name: 'Form',
-                component: () => import('@/views/form/index'),
-                meta: { title: 'Form', icon: 'form' }
+                name: 'Medical Record',
+                component: () => import('@/views/record/index'),
+                meta: { title: '病历管理', icon: 'form' }
             }
         ]
     },
