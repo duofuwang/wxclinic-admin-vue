@@ -30,3 +30,10 @@ export function deleteAdmin(ids) {
         method: 'delete'
     })
 }
+
+export function getAllAdminList() {
+    return request({
+        url: '/admin/getAllItems',
+        method: 'get'
+    })
+}
