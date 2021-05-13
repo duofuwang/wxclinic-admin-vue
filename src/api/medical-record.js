@@ -7,3 +7,18 @@ export function getMedicalRecordList(params) {
         params
     })
 }
+
+export function saveMedicalRecord(data) {
+    return request({
+        url: '/medical-record/save',
+        method: 'put',
+        data
+    })
+}
+
+export function deleteMedicalRecord(ids) {
+    return request({
+        url: '/medical-record/delete?ids=' + ids,
+        method: 'delete'
+    })
+}

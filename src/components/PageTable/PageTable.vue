@@ -15,7 +15,7 @@
             @row-click="handleRowClick"
             @sort-change="handleSortChange"
         >
-            <el-table-column type="selection" width="55">
+            <el-table-column type="selection" v-if="showSelection" width="55">
                 <!--<el-table-column
           align="center"
         type="index">-->
@@ -83,6 +83,10 @@ export default {
         defaultExpandAll: {
             type: Boolean,
             default: false,
+        },
+        showSelection: {
+            type: Boolean,
+            default: true,
         },
     },
     data() {
