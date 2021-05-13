@@ -21,6 +21,16 @@
                 ></el-input>
             </el-form-item>
 
+            <el-form-item label="手机号" prop="phoneNumber">
+                <el-input
+                    placeholder="请输入手机号"
+                    v-model="searchForm.phoneNumber"
+                    size="small"
+                    clearable
+                    @keyup.enter.native="handleQuery"
+                ></el-input>
+            </el-form-item>
+
             <el-form-item label="状态 " prop="status">
                 <el-select
                     v-model="searchForm.status"
@@ -102,6 +112,21 @@
                 ></el-table-column>
                 <el-table-column
                     align="center"
+                    prop="identityNumber"
+                    label="身份证号"
+                    :show-overflow-tooltip="true"
+                ></el-table-column>
+                <el-table-column
+                    align="center"
+                    prop="region"
+                    label="地区"
+                    :show-overflow-tooltip="true"
+                    ><template slot-scope="{ row }">
+                        {{ row.province }} {{ row.city }} {{ row.district }}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    align="center"
                     prop="height"
                     label="身高（cm）"
                 ></el-table-column>
@@ -110,21 +135,6 @@
                     prop="weight"
                     label="体重（kg）"
                 ></el-table-column>
-                <!-- <el-table-column
-          align="center"
-          prop="province"
-          label="省份"
-        ></el-table-column>
-        <el-table-column
-          align="center"
-          prop="city"
-          label="城市"
-        ></el-table-column>
-        <el-table-column
-          align="center"
-          prop="district"
-          label="地区"
-        ></el-table-column> -->
                 <el-table-column
                     align="center"
                     prop="lastVisitTime"
@@ -164,7 +174,7 @@
                             type="text"
                             icon="el-icon-star-off"
                             @click="handleSetAdmin(scope.row)"
-                            >设为管理</el-button
+                            >设为医生</el-button
                         >
                     </template>
                 </el-table-column>
@@ -344,7 +354,7 @@ export default {
         handleSetAdmin(row) {
             isAdmin({ userId: row.id }).then((res) => {
                 if (res.data) {
-                    this.$message.warning("该用户已经是管理员");
+                    this.$message.warning("该用户已经是医生了");
                     return;
                 }
                 this.$prompt("为用户设置登录密码", "提示", {
@@ -361,7 +371,7 @@ export default {
                         }).then((res) => {
                             if (res.success) {
                                 this.$message.success(
-                                    "设置管理员成功！密码是: " + value
+                                    "设置医生成功！密码是: " + value
                                 );
                             }
                         });

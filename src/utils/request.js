@@ -83,13 +83,10 @@ service.interceptors.response.use(
 
         const res = response.data
 
+        const message = response.data.msg || "系统繁忙";
+
         // if the custom code is not 20000, it is judged as an error.
         if (res.code !== 200) {
-            Message({
-                message: res.message || 'Error',
-                type: 'error',
-                duration: 5 * 1000
-            })
 
             // login status expired;
             if (res.code === 401 || res.code === 403) {
@@ -113,7 +110,7 @@ service.interceptors.response.use(
             }
 
 
-            return Promise.reject(new Error(res.message || 'Error'))
+            return Promise.reject(new Error(message || 'Error'))
         } else {
             return res
         }

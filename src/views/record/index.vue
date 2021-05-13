@@ -77,6 +77,7 @@
                     align="center"
                     prop="patientName"
                     label="患者"
+                    :show-overflow-tooltip="true"
                 ></el-table-column>
                 <el-table-column
                     align="center"
@@ -87,31 +88,37 @@
                     align="center"
                     prop="patientAddress"
                     label="住址"
+                    :show-overflow-tooltip="true"
                 ></el-table-column>
                 <el-table-column
                     align="center"
                     prop="chiefComplaint"
                     label="主诉"
+                    :show-overflow-tooltip="true"
                 ></el-table-column>
                 <el-table-column
                     align="center"
                     prop="medicalHistory"
                     label="病史"
+                    :show-overflow-tooltip="true"
                 ></el-table-column>
                 <el-table-column
                     align="center"
                     prop="doctorDiagnosis"
                     label="诊断"
+                    :show-overflow-tooltip="true"
                 ></el-table-column>
                 <el-table-column
                     align="center"
                     prop="treatmentMethod"
                     label="治疗方法"
+                    :show-overflow-tooltip="true"
                 ></el-table-column>
                 <el-table-column
                     align="center"
                     prop="prescription"
                     label="处方"
+                    :show-overflow-tooltip="true"
                 ></el-table-column>
                 <el-table-column
                     width="180px"
@@ -123,10 +130,11 @@
                     align="center"
                     prop="doctorName"
                     label="医生"
+                    :show-overflow-tooltip="true"
                 ></el-table-column>
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
-                        <router-link :to="'/article/edit/' + scope.row.id">
+                        <router-link :to="'/record/edit/' + scope.row.id">
                             <el-button type="primary" icon="el-icon-edit">
                                 编辑
                             </el-button>

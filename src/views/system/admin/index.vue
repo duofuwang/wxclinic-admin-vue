@@ -21,6 +21,16 @@
                 ></el-input>
             </el-form-item>
 
+            <el-form-item label="手机号" prop="phoneNumber">
+                <el-input
+                    placeholder="请输入手机号"
+                    v-model="searchForm.phoneNumber"
+                    size="small"
+                    clearable
+                    @keyup.enter.native="handleQuery"
+                ></el-input>
+            </el-form-item>
+
             <el-form-item label="状态 " prop="status">
                 <el-select
                     v-model="searchForm.status"
@@ -134,7 +144,13 @@
                             type="text"
                             icon="el-icon-star-off"
                             @click="handleDelAdmin(scope.row)"
-                            >撤销管理</el-button
+                            >撤销医生</el-button
+                        >
+                        <el-button
+                            type="text"
+                            icon="el-icon-key"
+                            @click="handleResetPwd(scope.row)"
+                            >重置密码</el-button
                         >
                     </template>
                 </el-table-column>
@@ -149,6 +165,12 @@
             :isEdit="isEdit"
             @close="handleClose"
         ></admin-dialog>
+
+        <reset-pwd
+            :userId="userId"
+            :show="isResetPwd"
+            @close="handleResetPwdClose"
+        ></reset-pwd>
     </div>
 </template>
 
@@ -157,9 +179,10 @@ import { getAdminList, deleteAdmin } from "@/api/admin";
 import { getUserById, changeStatus } from "@/api/user";
 import AdminDialog from "./components/AdminDialog.vue";
 import PageTable from "@/components/PageTable/PageTable.vue";
+import ResetPwd from "./components/ResetPwd.vue";
 
 export default {
-    components: { PageTable, AdminDialog },
+    components: { PageTable, AdminDialog, ResetPwd },
     filters: {
         statusFilter(status) {
             const statusMap = {
@@ -189,6 +212,8 @@ export default {
                     label: "禁用",
                 },
             ],
+            isResetPwd: false,
+            userId: "",
         };
     },
     computed: {
@@ -335,11 +360,15 @@ export default {
 
         // 撤销管理
         handleDelAdmin(row) {
-            this.$confirm('确认撤销"' + row.nickname + '"这个用户的管理员吗?', "警告", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-                type: "warning",
-            })
+            this.$confirm(
+                '确认撤销"' + row.nickname + '"的医生权限吗?',
+                "警告",
+                {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning",
+                }
+            )
                 .then(() => {
                     deleteAdmin(row.id).then((res) => {
                         if (res.success) {
@@ -349,7 +378,15 @@ export default {
                     });
                 })
                 .catch(() => {});
-        }
+        },
+
+        handleResetPwd(row) {
+            this.userId = row.userId;
+            this.isResetPwd = true;
+        },
+        handleResetPwdClose() {
+            this.isResetPwd = false;
+        },
     },
 };
 </script>

@@ -113,7 +113,9 @@
                 </el-date-picker>
             </el-form-item>
             <el-form-item class="flex justify-end">
-                <el-button type="primary" @click="submitForm">提交</el-button>
+                <el-button type="primary" @click="submitForm">{{
+                    isEdit ? "保存修改" : "提交"
+                }}</el-button>
                 <el-button @click="resetForm">重置</el-button>
             </el-form-item>
         </el-form>
@@ -126,7 +128,7 @@
     </div>
 </template>
 <script>
-import { saveMedicalRecord } from "@/api/medical-record";
+import { saveMedicalRecord, getMedicalRecordById } from "@/api/medical-record";
 import { getAllAdminList } from "@/api/admin";
 import util from "@/utils/util";
 import SelectUser from "./SelectUser.vue";
@@ -225,11 +227,23 @@ export default {
     },
     computed: {},
     watch: {},
-    created() {},
-    mounted() {
+    created() {
         this.getDoctorList();
+        if (this.isEdit) {
+            const id = this.$route.params && this.$route.params.id;
+            this.fetchData(id);
+        }
     },
+    mounted() {},
     methods: {
+        fetchData(id) {
+            getMedicalRecordById(id).then((res) => {
+                if (res.success) {
+                    this.recordForm = res.data;
+                }
+            });
+        },
+
         submitForm() {
             this.$refs["recordForm"].validate((valid) => {
                 if (!valid) {
@@ -262,9 +276,7 @@ export default {
         },
 
         handleClear() {
-            console.log("clear");
             this.recordForm.userId = undefined;
-            console.log(this.recordForm);
         },
 
         // 关闭对话框
@@ -278,6 +290,9 @@ export default {
                 ? user.nickname
                 : user.realName;
             this.recordForm.userId = user.id;
+            if (!util.isEmpty(user.birthday)) {
+                this.recordForm.patientAge = util.getAge(user.birthday)[0];
+            }
             this.handleClose();
         },
     },

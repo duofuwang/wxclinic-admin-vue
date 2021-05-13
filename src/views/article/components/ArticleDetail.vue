@@ -242,13 +242,13 @@ export default {
         };
     },
     created() {
+        this.getAllAdminList();
+        this.getArticleTypeList();
         if (this.isEdit) {
             const id = this.$route.params && this.$route.params.id;
             this.fetchData(id);
         }
-        this.getAllAdminList();
-        this.getArticleTypeList();
-
+        
         // Why need to make a copy of this.$route here?
         // Because if you enter this page and quickly switch tag, may be in the execution of the setTagsViewTitle function, this.$route is no longer pointing to the current page
         // https://github.com/PanJiaChen/vue-element-admin/issues/1221

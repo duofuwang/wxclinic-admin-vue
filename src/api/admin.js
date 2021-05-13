@@ -37,3 +37,11 @@ export function getAllAdminList() {
         method: 'get'
     })
 }
+
+export function resetPwd(data) {
+    return request({
+        url: '/admin/resetPwd',
+        method: 'put',
+        data
+    })
+}

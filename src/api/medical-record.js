@@ -22,3 +22,10 @@ export function deleteMedicalRecord(ids) {
         method: 'delete'
     })
 }
+
+export function getMedicalRecordById(id) {
+    return request({
+        url: '/medical-record/' + id,
+        method: 'get'
+    })
+}
