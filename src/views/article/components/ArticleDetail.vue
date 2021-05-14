@@ -39,7 +39,7 @@
                             <el-option
                                 v-for="item in authorListOptions"
                                 :key="item.userId"
-                                :label="item.nickname"
+                                :label="item.doctorName"
                                 :value="item.userId"
                             >
                             </el-option>

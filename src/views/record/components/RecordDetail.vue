@@ -49,7 +49,7 @@
                     <el-option
                         v-for="(item, index) in doctorOptions"
                         :key="index"
-                        :label="item.nickname"
+                        :label="item.doctorName"
                         :value="item.userId"
                         :disabled="item.disabled"
                     ></el-option>

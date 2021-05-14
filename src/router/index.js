@@ -91,7 +91,7 @@ export const constantRoutes = [
         component: Layout,
         redirect: '/application/appointment',
         name: 'Application',
-        meta: { title: '申请管理', icon: 'el-icon-tickets' },
+        meta: { title: '申请管理', icon: 'el-icon-s-check' },
         children: [
             {
                 path: 'appointment',
@@ -116,7 +116,7 @@ export const constantRoutes = [
                 path: 'index',
                 name: 'Emergency',
                 component: () => import('@/views/emergency/index'),
-                meta: { title: '紧急呼救', icon: 'el-icon-phone' }
+                meta: { title: '紧急呼救', icon: 'el-icon-phone-outline' }
             }
         ]
     },
@@ -154,14 +154,14 @@ export const constantRoutes = [
         path: '/record',
         component: Layout,
         redirect: '/record/list',
-        name: 'Medical Record',
-        meta: { title: '病历管理', icon: 'form' },
+        name: 'MedicalRecord',
+        meta: { title: '病历管理', icon: 'el-icon-document' },
         children: [
             {
                 path: 'list',
                 name: 'MedicalRecord',
                 component: () => import('@/views/record/index'),
-                meta: { title: '病历管理', icon: 'form' }
+                meta: { title: '病历管理', icon: 'el-icon-document' }
             },
             {
                 path: 'create',
@@ -181,60 +181,42 @@ export const constantRoutes = [
     },
 
     {
-        path: '/nested',
+        path: '/finance',
         component: Layout,
-        redirect: '/nested/menu1',
-        name: 'Nested',
-        meta: {
-            title: 'Nested',
-            icon: 'nested'
-        },
         children: [
             {
-                path: 'menu1',
-                component: () => import('@/views/nested/menu1/index'), // Parent router-view
-                name: 'Menu1',
-                meta: { title: 'Menu1' },
-                children: [
-                    {
-                        path: 'menu1-1',
-                        component: () => import('@/views/nested/menu1/menu1-1'),
-                        name: 'Menu1-1',
-                        meta: { title: 'Menu1-1' }
-                    },
-                    {
-                        path: 'menu1-2',
-                        component: () => import('@/views/nested/menu1/menu1-2'),
-                        name: 'Menu1-2',
-                        meta: { title: 'Menu1-2' },
-                        children: [
-                            {
-                                path: 'menu1-2-1',
-                                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                                name: 'Menu1-2-1',
-                                meta: { title: 'Menu1-2-1' }
-                            },
-                            {
-                                path: 'menu1-2-2',
-                                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                                name: 'Menu1-2-2',
-                                meta: { title: 'Menu1-2-2' }
-                            }
-                        ]
-                    },
-                    {
-                        path: 'menu1-3',
-                        component: () => import('@/views/nested/menu1/menu1-3'),
-                        name: 'Menu1-3',
-                        meta: { title: 'Menu1-3' }
-                    }
-                ]
+                path: 'order',
+                name: 'Order',
+                component: () => import('@/views/finance/order'),
+                meta: { title: '财务管理', icon: 'el-icon-collection-tag' }
+            }
+        ]
+    },
+
+    {
+        path: '/messageboard',
+        component: Layout,
+        redirect: '/messageboard/message',
+        name: 'MessageBoard',
+        meta: { title: "留言管理", icon: 'el-icon-message'},
+        children: [
+            {
+                path: 'message',
+                name: 'Message',
+                component: () => import('@/views/messageboard/message'),
+                meta: { title: '用户留言', icon: 'el-icon-chat-line-square' }
             },
             {
-                path: 'menu2',
-                component: () => import('@/views/nested/menu2/index'),
-                name: 'Menu2',
-                meta: { title: 'menu2' }
+                path: 'evaluate',
+                name: 'Evaluate',
+                component: () => import('@/views/messageboard/evaluate'),
+                meta: { title: '服务评价', icon: 'el-icon-star-off' }
+            },
+            {
+                path: 'suggestion',
+                name: 'Suggestion',
+                component: () => import('@/views/messageboard/suggestion'),
+                meta: { title: '改进建议', icon: 'el-icon-thumb' }
             }
         ]
     },
