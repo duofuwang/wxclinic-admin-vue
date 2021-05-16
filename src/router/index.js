@@ -60,7 +60,7 @@ export const constantRoutes = [
             path: 'dashboard',
             name: 'Dashboard',
             component: () => import('@/views/dashboard/index'),
-            meta: { title: '首页', icon: 'el-icon-s-home' }
+            meta: { title: '首页', icon: 'el-icon-data-line' }
         }]
     },
 
@@ -69,20 +69,26 @@ export const constantRoutes = [
         component: Layout,
         redirect: '/system/user',
         name: 'System',
-        meta: { title: '系统管理', icon: 'el-icon-s-tools' },
+        meta: { title: '系统管理', icon: 'el-icon-first-aid-kit' },
         children: [
             {
                 path: 'user',
                 name: 'User',
                 component: () => import('@/views/system/user/index'),
-                meta: { title: '用户管理', icon: 'el-icon-user-solid' }
+                meta: { title: '用户管理', icon: 'el-icon-user' }
             },
             {
                 path: 'admin',
                 name: 'Admin',
                 component: () => import('@/views/system/admin/index'),
-                meta: { title: '医生管理', icon: 'el-icon-s-platform' }
-            }
+                meta: { title: '医生管理', icon: 'el-icon-monitor' }
+            },
+            {
+                path: 'config',
+                name: 'Config',
+                component: () => import('@/views/system/config/index'),
+                meta: { title: '诊所配置', icon: 'el-icon-set-up' }
+            },
         ]
     },
 
@@ -198,7 +204,7 @@ export const constantRoutes = [
         component: Layout,
         redirect: '/messageboard/message',
         name: 'MessageBoard',
-        meta: { title: "留言管理", icon: 'el-icon-message'},
+        meta: { title: "留言管理", icon: 'el-icon-message' },
         children: [
             {
                 path: 'message',

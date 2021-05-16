@@ -124,6 +124,7 @@
                     align="center"
                     prop="summary"
                     label="摘要"
+                    :show-overflow-tooltip="true"
                 ></el-table-column>
                 <el-table-column align="center" prop="type" label="类型"
                     ><template slot-scope="{ row }">
