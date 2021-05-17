@@ -21,6 +21,23 @@
                 ></el-input>
             </el-form-item>
 
+            <el-form-item label="状态 " prop="paid">
+                <el-select
+                    v-model="searchForm.paid"
+                    placeholder="请选择订单状态"
+                    clearable
+                    size="small"
+                    @keyup.enter.native="handleQuery"
+                >
+                    <el-option
+                        v-for="item in statusOptions"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                    />
+                </el-select>
+            </el-form-item>
+
             <el-form-item label="日期 " prop="range">
                 <el-date-picker
                     v-model="range"
@@ -79,15 +96,31 @@
                 ></el-table-column>
                 <el-table-column
                     align="center"
-                    prop="suggestion"
-                    label="建议"
-                    :show-overflow-tooltip="true"
+                    prop="fee"
+                    label="金额(元)"
                 ></el-table-column>
                 <el-table-column
                     width="180px"
                     align="center"
+                    prop="paid"
+                    label="状态"
+                    ><template slot-scope="{ row }">
+                        <el-tag :type="row.paid | tagTypeFilter">
+                            {{ row.paid | orderStatusFilter }}
+                        </el-tag>
+                    </template></el-table-column
+                >
+                <el-table-column
+                    width="180px"
+                    align="center"
                     prop="createTime"
-                    label="留言时间"
+                    label="创建时间"
+                ></el-table-column>
+                <el-table-column
+                    width="180px"
+                    align="center"
+                    prop="expirationTime"
+                    label="过期时间"
                 ></el-table-column>
                 <el-table-column label="操作" align="center">
                     <template slot-scope="{ row }">
@@ -103,27 +136,34 @@
             </template>
         </page-table>
 
-        <suggestion-dialog
+        <order-dialog
             :title="dialogTitle"
             :show="dialogVisible"
-            :form="suggestion"
+            :form="order"
             @close="handleClose"
-        ></suggestion-dialog>
+        ></order-dialog>
     </div>
 </template>
 
 <script>
-import {
-    getSuggestionList,
-    deleteSuggestion,
-    getSuggestionById,
-} from "@/api/suggestion";
+import { getOrderList, deleteOrder, getOrderById } from "@/api/order";
 import PageTable from "@/components/PageTable/PageTable.vue";
-import SuggestionDialog from "./components/SuggestionDialog.vue";
+import OrderDialog from "./components/OrderDialog.vue";
 
 export default {
-    components: { PageTable, SuggestionDialog },
-    filters: {},
+    components: { PageTable, OrderDialog },
+    filters: {
+        orderStatusFilter(status) {
+            if (status === 0) return "未支付";
+            if (status === 1) return "已支付";
+            return "未支付";
+        },
+        tagTypeFilter(status) {
+            if (status === 0) return "warning";
+            if (status === 1) return "success";
+            return "warning";
+        },
+    },
     data() {
         return {
             searchForm: {},
@@ -131,7 +171,17 @@ export default {
             selections: [],
             dialogVisible: false,
             dialogTitle: "",
-            suggestion: {},
+            order: {},
+            statusOptions: [
+                {
+                    value: 0,
+                    label: "未支付",
+                },
+                {
+                    value: 1,
+                    label: "已支付",
+                },
+            ],
         };
     },
     computed: {
@@ -149,7 +199,7 @@ export default {
                 startDate: this.range[0],
                 endDate: this.range[1],
             };
-            getSuggestionList(filter).then((res) => {
+            getOrderList(filter).then((res) => {
                 this.total = res.data.total;
                 const tableData = {
                     ...res.data,
@@ -184,8 +234,8 @@ export default {
 
         // 查看
         handleInfo(row) {
-            getSuggestionById(row.id).then((res) => {
-                this.suggestion = res.data;
+            getOrderById(row.id).then((res) => {
+                this.order = res.data;
                 this.dialogTitle = "查看";
                 this.dialogVisible = true;
             });
@@ -199,7 +249,7 @@ export default {
         // 批量删除
         handleMultiDelete() {
             this.$confirm(
-                "确认删除这" + this.selections.length + "个评价?",
+                "确认删除这" + this.selections.length + "个订单?",
                 "警告",
                 {
                     confirmButtonText: "确定",
@@ -209,7 +259,7 @@ export default {
             )
                 .then(() => {
                     var ids = this.selections.map((item) => item.id).join(",");
-                    deleteSuggestion(ids).then((res) => {
+                    deleteOrder(ids).then((res) => {
                         if (res.success) {
                             this.$message.success("删除成功");
                             this.reload();

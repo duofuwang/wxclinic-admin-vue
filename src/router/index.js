@@ -189,12 +189,21 @@ export const constantRoutes = [
     {
         path: '/finance',
         component: Layout,
+        redirect: '/finance/index',
+        name: 'FinanceManagement',
+        meta: { title: "财务管理", icon: 'el-icon-wallet' },
         children: [
             {
                 path: 'order',
                 name: 'Order',
                 component: () => import('@/views/finance/order'),
-                meta: { title: '财务管理', icon: 'el-icon-collection-tag' }
+                meta: { title: '订单管理', icon: 'el-icon-collection-tag' }
+            },
+            {
+                path: 'statistics',
+                name: 'Statistics',
+                component: () => import('@/views/finance/statistics'),
+                meta: { title: '财务统计', icon: 'el-icon-coin' }
             }
         ]
     },
@@ -223,17 +232,6 @@ export const constantRoutes = [
                 name: 'Suggestion',
                 component: () => import('@/views/messageboard/suggestion'),
                 meta: { title: '改进建议', icon: 'el-icon-thumb' }
-            }
-        ]
-    },
-
-    {
-        path: '/external-link',
-        component: Layout,
-        children: [
-            {
-                path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-                meta: { title: 'External Link', icon: 'link' }
             }
         ]
     },

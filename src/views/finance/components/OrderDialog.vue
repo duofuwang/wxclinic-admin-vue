@@ -31,29 +31,28 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="评价时间" prop="createTime">
-                            <el-date-picker
+                        <el-form-item label="金额(元)" prop="fee">
+                            <el-input
                                 v-if="isEdit"
-                                clearable
-                                v-model="form.createTime"
-                                type="date"
-                                placeholder="选择日期"
-                                value-format="yyyy-MM-dd"
-                                :picker-options="dateOption"
+                                v-model="form.fee"
+                                placeholder="请输入金额"
                             />
-                            <div v-else>{{ form.createTime }}</div>
+                            <div v-else>{{ form.fee }}</div>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="24">
-                        <el-form-item label="建议" prop="suggestion">
-                            <el-input
-                                type="textarea"
-                                v-if="isEdit"
-                                v-model="form.suggestion"
-                                placeholder="请输入留言"
-                            >
-                            </el-input>
-                            <div v-else v-html="form.suggestion"></div>
+                    <el-col :span="12">
+                        <el-form-item label="状态" prop="paid">
+                            <div>{{ form.paid | orderStatusFilter }}</div>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="创建时间" prop="createTime">
+                            <div>{{ form.createTime }}</div>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="过期时间" prop="expirationTime">
+                            <div>{{ form.expirationTime }}</div>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -99,6 +98,13 @@ export default {
         isEdit: {
             type: Boolean,
             default: false,
+        },
+    },
+    filters: {
+        orderStatusFilter(status) {
+            if (status === 0) return "未支付";
+            if (status === 1) return "已支付";
+            return "未支付";
         },
     },
     watch: {
@@ -164,29 +170,4 @@ export default {
 </script>
 
 <style scoped>
-::v-deep .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-}
-
-::v-deep .avatar-uploader .el-upload:hover {
-    border-color: #409eff;
-}
-
-::v-deep .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 80px;
-    height: 80px;
-    line-height: 80px;
-    text-align: center;
-}
-.avatar {
-    width: 80px;
-    height: 80px;
-    display: block;
-}
 </style>>
