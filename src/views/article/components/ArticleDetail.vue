@@ -21,6 +21,7 @@
                 <el-input
                     v-model="postForm.summary"
                     placeholder="请输入摘要"
+                    type="textarea"
                     :maxlength="200"
                     show-word-limit
                     clearable
@@ -35,6 +36,7 @@
                             v-model="postForm.userId"
                             filterable
                             placeholder="请选择作者"
+                            @change="handleAuthorChange"
                         >
                             <el-option
                                 v-for="item in authorListOptions"
@@ -149,6 +151,7 @@ import { getArticleById, saveArticle } from "@/api/article";
 import { getArticleTypeList, getArticleTypeById } from "@/api/articletype";
 import { getAllAdminList } from "@/api/admin";
 import { upload } from "@/api/obs";
+import storage from "@/utils/storage";
 
 export default {
     name: "ArticleDetail",
@@ -173,6 +176,7 @@ export default {
             }
         };
         return {
+            userInfo: {},
             searchForm: {},
             postForm: {
                 content: "",
@@ -204,7 +208,7 @@ export default {
                     {
                         required: true,
                         message: "请选择作者",
-                        trigger: "change",
+                        trigger: "blur",
                     },
                 ],
                 createTime: [
@@ -218,6 +222,13 @@ export default {
                     {
                         required: true,
                         message: "请选择文章类型",
+                        trigger: "change",
+                    },
+                ],
+                banner: [
+                    {
+                        required: true,
+                        message: "请上传文章头图",
                         trigger: "change",
                     },
                 ],
@@ -248,7 +259,7 @@ export default {
             const id = this.$route.params && this.$route.params.id;
             this.fetchData(id);
         }
-        
+
         // Why need to make a copy of this.$route here?
         // Because if you enter this page and quickly switch tag, may be in the execution of the setTagsViewTitle function, this.$route is no longer pointing to the current page
         // https://github.com/PanJiaChen/vue-element-admin/issues/1221
@@ -329,6 +340,10 @@ export default {
         getAllAdminList() {
             getAllAdminList().then((res) => {
                 this.authorListOptions = res.data;
+                this.userInfo = storage.getUser();
+                // if (!this.isEdit) {
+                //     this.postForm.userId = this.userInfo.id;
+                // }
             });
         },
 
@@ -349,6 +364,12 @@ export default {
                 array.push(data.id);
                 this.articleType = array;
             });
+        },
+
+        handleAuthorChange(userId) {
+            // console.log(this.postForm);
+            // this.postForm.userId = userId;
+            // console.log(this.postForm);
         },
 
         handleArticleTypeChange() {

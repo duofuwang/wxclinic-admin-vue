@@ -156,11 +156,13 @@ export default {
         orderStatusFilter(status) {
             if (status === 0) return "未支付";
             if (status === 1) return "已支付";
+            if (status === 2) return "已取消";
             return "未支付";
         },
         tagTypeFilter(status) {
             if (status === 0) return "warning";
             if (status === 1) return "success";
+            if (status === 2) return "info";
             return "warning";
         },
     },
@@ -180,6 +182,10 @@ export default {
                 {
                     value: 1,
                     label: "已支付",
+                },
+                {
+                    value:2,
+                    label: "已取消",
                 },
             ],
         };

@@ -17,6 +17,17 @@ import '@/permission' // permission control
 
 import "@/assets/style/main.scss"; // main css
 
+import JwChat from '@/components/JwChat';
+
+import global from './api/global.js'
+import * as socket from './api/socketv2'
+
+
+Vue.use(JwChat)
+
+Vue.prototype.GLOBAL = global
+Vue.prototype.$socket = socket
+
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -46,6 +57,7 @@ Vue.prototype.msgInfo = function(msg) {
 };
 
 
+
 // set ElementUI lang to EN
 // Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
@@ -56,9 +68,10 @@ Vue.use(ElementUI, {
 
 Vue.config.productionTip = false
 
-new Vue({
+const vue = new Vue({
   el: '#app',
   router,
   store,
   render: h => h(App)
 })
+export default vue

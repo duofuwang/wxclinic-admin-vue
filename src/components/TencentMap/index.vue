@@ -8,11 +8,11 @@ export default {
     name: "mapChild",
     props: {
         latitude: {
-            type: String,
+            type: Number | String,
             default: "39.90555555555556",
         },
         longitude: {
-            type: String,
+            type: Number | String,
             default: "116.42472222222223",
         },
     },

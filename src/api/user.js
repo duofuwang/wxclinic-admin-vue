@@ -63,3 +63,10 @@ export function deleteUser(ids) {
         method: 'delete'
     })
 }
+
+export function getNewVisitStatistics() {
+    return request({
+        url: '/user/getNewVisitStatistics',
+        method: 'get'
+    })
+}

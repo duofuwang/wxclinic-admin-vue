@@ -7,6 +7,7 @@
             width="650px"
             @close="handleClose"
             append-to-body
+            class="scroll-dialog"
         >
             <el-form ref="form" :model="form" label-width="auto">
                 <el-row>
@@ -97,6 +98,22 @@
                             </div>
                         </el-form-item>
                     </el-col>
+                    <el-col :span="24">
+                        <el-form-item label="图片" prop="image">
+                            <div
+                                v-for="(item, index) in imageList"
+                                :key="index"
+                                class="inline-flex justify-start"
+                            >
+                                <el-image
+                                    style="width: 100px; height: 100px"
+                                    fit="contain"
+                                    :src="item"
+                                    @click="handlePictureCardPreview(item)"
+                                ></el-image>
+                            </div>
+                        </el-form-item>
+                    </el-col>
                 </el-row>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -107,11 +124,16 @@
                 <el-button @click="handleClose" v-if="!isEdit">返 回</el-button>
             </div>
         </el-dialog>
+        <!-- 查看图片 -->
+        <el-dialog :visible.sync="dialogVisible" width="400px">
+            <div class="flex justify-center">
+                <img width="100%" :src="dialogImageUrl" alt="" />
+            </div>
+        </el-dialog>
     </div>
 </template>
 
 <script>
-
 export default {
     props: {
         form: {
@@ -134,8 +156,15 @@ export default {
         },
         applicationType: {
             type: Number,
-            default: 1
-        }
+            default: 1,
+        },
+    },
+    computed: {
+        imageList() {
+            if (this.form.image) {
+                return this.form.image.split(",");
+            }
+        },
     },
     watch: {
         show() {
@@ -163,11 +192,15 @@ export default {
 
     methods: {
         handleSubmit() {
-            console.log(this.form)
+            console.log(this.form);
         },
         handleClose() {
             this.$emit("close", this.refresh);
             this.refresh = false;
+        },
+        handlePictureCardPreview(url) {
+            this.dialogImageUrl = url;
+            this.dialogVisible = true;
         },
     },
 };
@@ -177,5 +210,9 @@ export default {
 .description-content {
     max-height: 150px;
     overflow-y: scroll;
+}
+.scroll-dialog ::v-deep .el-dialog__body {
+    overflow-y: auto;
+    max-height: 400px;
 }
 </style>>

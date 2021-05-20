@@ -7,3 +7,10 @@ export function getFinanceStatisticsList(params) {
         params
     })
 }
+
+export function getRecentMonthFinance() {
+    return request({
+        url: '/finance/getRecentMonthFinance',
+        method: 'get'
+    })
+}

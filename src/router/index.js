@@ -128,6 +128,19 @@ export const constantRoutes = [
     },
 
     {
+        path: '/consult',
+        component: Layout,
+        children: [
+            {
+                path: 'index',
+                name: 'Consult',
+                component: () => import('@/views/consult/index'),
+                meta: { title: '在线问诊', icon: 'el-icon-chat-dot-square' }
+            }
+        ]
+    },
+
+    {
         path: '/article',
         component: Layout,
         redirect: '/article/list',
@@ -160,7 +173,7 @@ export const constantRoutes = [
         path: '/record',
         component: Layout,
         redirect: '/record/list',
-        name: 'MedicalRecord',
+        name: 'MedicalRecordManagement',
         meta: { title: '病历管理', icon: 'el-icon-document' },
         children: [
             {

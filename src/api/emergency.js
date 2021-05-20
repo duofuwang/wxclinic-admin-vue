@@ -32,3 +32,10 @@ export function deleteEmergency(ids) {
         method: 'delete'
     })
 }
+
+export function getEmergencyStatistics() {
+    return request({
+        url: '/emergency/getEmergencyStatistics',
+        method: 'get'
+    })
+}

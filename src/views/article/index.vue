@@ -183,9 +183,9 @@ export default {
             return "已发布";
         },
         statusTypeFilter(status) {
-            if (status === 0) return "info";
+            if (status === 0) return "warning";
             if (status === 1) return "success";
-            return "info";
+            return "warning";
         },
     },
     data() {

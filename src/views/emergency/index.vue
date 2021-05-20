@@ -118,6 +118,7 @@
                     align="center"
                     prop="location"
                     label="位置"
+                    :show-overflow-tooltip="true"
                 ></el-table-column>
                 <el-table-column align="center" prop="remark" label="备注">
                     <template slot-scope="scope">{{
@@ -145,6 +146,7 @@
                             >查看</el-button
                         >
                         <el-button
+                            v-if="scope.row.status == 1"
                             type="text"
                             icon="el-icon-check"
                             @click="handleStop(scope.row)"
@@ -182,12 +184,12 @@ export default {
     filters: {
         statusFilter(status) {
             if (status === 1) return "呼救中";
-            if (status === 2) return "已结束";
+            if (status === 0) return "已结束";
             return "已结束";
         },
         statusTypeFilter(status) {
             if (status === 1) return "warning";
-            if (status === 2) return "info";
+            if (status === 0) return "info";
             return "warning";
         },
         descriptionFilter(description) {
@@ -211,7 +213,7 @@ export default {
                     label: "呼救中",
                 },
                 {
-                    value: 2,
+                    value: 0,
                     label: "已结束",
                 },
             ],
@@ -282,7 +284,7 @@ export default {
                     this.dialogTitle = "查看";
                     this.showEmergencyDialog = true;
                     this.isEdit = false;
-                  //   this.$refs.dialog.setLocation();
+                    //   this.$refs.dialog.setLocation();
                 }
             });
         },

@@ -8,6 +8,7 @@
             @close="handleClose"
             @open="handleOpen"
             append-to-body
+            class="scroll-dialog"
         >
             <el-form ref="form" :model="form" label-width="auto">
                 <el-row>
@@ -192,5 +193,9 @@ export default {
 <style scoped>
 .description-content {
     max-height: 150px;
+}
+.scroll-dialog ::v-deep .el-dialog__body{
+    overflow-y: auto;
+    max-height: 400px;
 }
 </style>>

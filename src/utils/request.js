@@ -117,7 +117,8 @@ service.interceptors.response.use(
     },
     error => {
         hideLoading()
-        console.log('err' + error) // for debug
+        console.log('err:::' + error) // for debug
+        console.log(error.code)
         Message({
             message: error.message,
             type: 'error',
