@@ -35,7 +35,8 @@ module.exports = {
     open: false,
     proxy: {
       [process.env.VUE_APP_BASE_API]: {
-        target: `http://localhost:8686`,
+        target: `https://dopoiv.space`,
+        // target: `http://localhost:8787`,
         changeOrigin: true
       }
     },

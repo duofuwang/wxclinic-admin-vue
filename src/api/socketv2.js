@@ -4,7 +4,7 @@ import { Notification } from 'element-ui';
 
 var websock = null;
 var global_callback = null;
-var serverUri = 'ws://localhost:1024/channel';	// webSocket 连接地址
+var serverUri = 'wss://dopoiv.space/wss';	// webSocket 连接地址
 
 function initWebSocket() { // 初始化 weosocket
     const user = storage.getUser()
