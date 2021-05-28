@@ -4,17 +4,15 @@ import { Notification } from 'element-ui';
 
 var websock = null;
 var global_callback = null;
+// var serverUri = 'ws://localhost:1024/channel';	// webSocket 连接地址
 var serverUri = 'wss://dopoiv.space/wss';	// webSocket 连接地址
 
 function initWebSocket() { // 初始化 weosocket
+    // 用户是否登录
     const user = storage.getUser()
     if (!user) {
         return
     }
-    // if (callback) {
-    //     global_callback = callback;
-    //     return
-    // }
     websock = new WebSocket(serverUri);
     websock.onmessage = function (e) {
         websocketonmessage(e);
@@ -57,6 +55,13 @@ function sendSock(agentData) {
 
 // 数据接收
 function websocketonmessage(e) {
+    // 如果获取到消息 表明连接正常 心跳检测重置 
+    heartCheck.reset().start();
+    // 心跳
+    if (e.data == "PONG") {
+        console.log("PONG")
+        return
+    }
 
     var data = JSON.parse(e.data)
     console.log(data)
@@ -66,6 +71,12 @@ function websocketonmessage(e) {
             message: data.newEmergency.message,
             duration: 0
         })
+        return
+    }
+
+    // 心跳
+    if (data == "PONG") {
+        console.log("接收到心跳")
         return
     }
 
@@ -82,6 +93,8 @@ function websocketsend(agentData) {
 // 关闭连接
 function websocketclose(e) {
     console.log("connection closed (" + e.code + ")");
+    websock = null;
+    // 自动重连
     setTimeout(() => {
         initWebSocket();
     }, 1000);
@@ -98,6 +111,39 @@ function websocketOpen(e) {
     dataContent.message = msg;
     dataContent.action = vue.GLOBAL.action.CONNECT;
     sendSock(dataContent)
+    // 保持心跳
+    heartCheck.reset().start();
+}
+
+// 心跳检测
+var heartCheck = {
+    timeout: 30000, // 30s发送一次心跳
+    timeoutObj: null,
+    serverTimeoutObj: null,
+    reset: function () {
+        clearTimeout(this.timeoutObj);
+        clearTimeout(this.serverTimeoutObj);
+        return this;
+    },
+    start: function () {
+        var self = this;
+        this.timeoutObj = setTimeout(function () {
+            var userInfo = storage.getUser();
+            var dataContent = vue.GLOBAL.dataContent;
+            var msg = vue.GLOBAL.message;
+            msg.fromId = userInfo.id;
+            dataContent.message = msg;
+            dataContent.action = vue.GLOBAL.action.KEEPALIVE;
+            // 这里发送一个心跳，后端收到后，返回一个心跳消息
+            sendSock(dataContent);
+            console.log("PING");
+            self.serverTimeoutObj = setTimeout(function () {
+                // 如果超过一定时间还没重置，说明后端主动断开了
+                // 这时我们主动关闭连接 等待重连
+                closeWebSocket();
+            }, self.timeout)
+        }, this.timeout)
+    }
 }
 
 function onSockMessage(callback) {
