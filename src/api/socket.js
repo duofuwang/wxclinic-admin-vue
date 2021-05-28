@@ -3,7 +3,7 @@ import storage from '@/utils/storage'
 let websock = null
 let messageCallback = null
 let errorCallback = null
-let wsUrl = 'ws://localhost:1024/channel'
+let wsUrl = 'wss://dopoiv.space/channel'
 
 // 接收ws后端返回的数据
 function websocketonmessage(e) {
